@@ -1,412 +1,527 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Preview</title>
-</head>
-<body>
-<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>World Countries and Leaders by Continent</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f4f7f8;
-    margin: 0;
-    padding: 20px;
-    color: #333;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 1em;
-    color: #222;
-  }
-  .continent {
-    background: white;
-    border-radius: 8px;
-    margin-bottom: 1em;
-    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
-  }
-  .continent > h2 {
-    cursor: pointer;
-    margin: 0;
-    padding: 15px 20px;
-    background: #0366d6;
-    color: white;
-    border-radius: 8px 8px 0 0;
-    user-select: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .continent > h2:hover {
-    background: #024eac;
-  }
-  .toggle-icon {
-    font-weight: bold;
-    font-size: 1.3em;
-    user-select: none;
-  }
-  .countries-list {
-    display: none;
-    padding: 10px 20px 20px 20px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  th, td {
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-    vertical-align: middle;
-  }
-  th {
-    background: #e2e6ef;
-  }
-  img.flag {
-    width: 40px;
-    height: 25px;
-    object-fit: cover;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-  }
-  .leader {
-    font-style: italic;
-    color: #555;
-  }
-  /* Responsive */
-  @media (max-width: 600px) {
-    img.flag {
-      width: 30px;
-      height: 20px;
-    }
-  }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>World Countries and Leaders by Continent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            color: #2d3436;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #0984e3, #00b894);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            position: sticky;
+            top: 20px;
+            background: #2d3436;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #00b894;
+        }
+
+        .continents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .continent {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .continent:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .continent > h2 {
+            cursor: pointer;
+            margin: 0;
+            padding: 1rem;
+            background: #0984e3;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .continent > h2:hover {
+            background: #0652dd;
+        }
+
+        .toggle-icon {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .countries-list {
+            display: none;
+            padding: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #dfe6e9;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: #2d3436;
+        }
+
+        td {
+            font-size: 0.9rem;
+        }
+
+        img.flag {
+            width: 40px;
+            height: 25px;
+            object-fit: cover;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        img.flag:hover {
+            transform: scale(1.1);
+        }
+
+        .leader {
+            font-style: italic;
+            color: #636e72;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #000000;
+            color: white;
+            margin-top: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        footer p {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+        }
+
+        footer a {
+            color: #00b894;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #55efc4;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .continent > h2 {
+                font-size: 1.2rem;
+            }
+
+            img.flag {
+                width: 30px;
+                height: 20px;
+            }
+
+            th, td {
+                font-size: 0.8rem;
+                padding: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>World Data Explorer</h1>
+    </header>
 
-<h1>World Data Explorer</h1>
+    <nav>
+        <ul>
+            <li><a href="#asia">Asia</a></li>
+            <li><a href="#africa">Africa</a></li>
+            <li><a href="#north-america">North America</a></li>
+            <li><a href="#south-america">South America</a></li>
+            <li><a href="#europe">Europe</a></li>
+            <li><a href="#oceania">Oceania</a></li>
+            <li><a href="#antarctica">Antarctica</a></li>
+        </ul>
+    </nav>
 
-<div class="continent" id="asia">
-  <h2>Asia <span class="toggle-icon">+</span></h2>
-  <div class="countries-list">
-    <table>
-      <thead><tr><th>Flag</th><th>Country</th><th>Leader</th></tr></thead>
-      <tbody>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/af.png" alt="Afghanistan Flag"></td><td>Afghanistan</td><td class="leader">Acting Prime Minister Abdul Kabir</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/am.png" alt="Armenia Flag"></td><td>Armenia</td><td class="leader">Prime Minister Nikol Pashinyan</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/az.png" alt="Azerbaijan Flag"></td><td>Azerbaijan</td><td class="leader">President Ilham Aliyev</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bh.png" alt="Bahrain Flag"></td><td>Bahrain</td><td class="leader">King Hamad bin Isa Al Khalifa</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bd.png" alt="Bangladesh Flag"></td><td>Bangladesh</td><td class="leader">Chief Adviser Muhammad Yunus</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bt.png" alt="Bhutan Flag"></td><td>Bhutan</td><td class="leader">Prime Minister Lotay Tshering</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bn.png" alt="Brunei Flag"></td><td>Brunei</td><td class="leader">Sultan Hassanal Bolkiah</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/kh.png" alt="Cambodia Flag"></td><td>Cambodia</td><td class="leader">Prime Minister Hun Manet</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cn.png" alt="China Flag"></td><td>China</td><td class="leader">President Xi Jinping</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cy.png" alt="Cyprus Flag"></td><td>Cyprus</td><td class="leader">President Nikos Christodoulides</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ge.png" alt="Georgia Flag"></td><td>Georgia</td><td class="leader">Prime Minister Irakli Garibashvili</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/in.png" alt="India Flag"></td><td>India</td><td class="leader">Prime Minister Narendra Modi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/id.png" alt="Indonesia Flag"></td><td>Indonesia</td><td class="leader">President Prabowo Subianto</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ir.png" alt="Iran Flag"></td><td>Iran</td><td class="leader">President Ebrahim Raisi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/iq.png" alt="Iraq Flag"></td><td>Iraq</td><td class="leader">Prime Minister Mohammed Shia' Al Sudani</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/il.png" alt="Israel Flag"></td><td>Israel</td><td class="leader">Prime Minister Benjamin Netanyahu</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/jp.png" alt="Japan Flag"></td><td>Japan</td><td class="leader">Prime Minister Shigeru Ishiba</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/jo.png" alt="Jordan Flag"></td><td>Jordan</td><td class="leader">Prime Minister Bisher Al-Khasawneh</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/kz.png" alt="Kazakhstan Flag"></td><td>Kazakhstan</td><td class="leader">President Kassym-Jomart Tokayev</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/kw.png" alt="Kuwait Flag"></td><td>Kuwait</td><td class="leader">Prime Minister Ahmad Nawaf Al-Ahmad Al-Sabah</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/kg.png" alt="Kyrgyzstan Flag"></td><td>Kyrgyzstan</td><td class="leader">President Sadyr Japarov</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/la.png" alt="Laos Flag"></td><td>Laos</td><td class="leader">Prime Minister Sonexay Siphandone</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/lb.png" alt="Lebanon Flag"></td><td>Lebanon</td><td class="leader">Prime Minister Najib Mikati</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/my.png" alt="Malaysia Flag"></td><td>Malaysia</td><td class="leader">Prime Minister Anwar Ibrahim</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mv.png" alt="Maldives Flag"></td><td>Maldives</td><td class="leader">President Mohamed Muizzu</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mn.png" alt="Mongolia Flag"></td><td>Mongolia</td><td class="leader">Prime Minister Luvsannamsrain Oyun-Erdene</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mm.png" alt="Myanmar Flag"></td><td>Myanmar</td><td class="leader">Prime Minister Min Aung Hlaing</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/np.png" alt="Nepal Flag"></td><td>Nepal</td><td class="leader">Prime Minister Pushpa Kamal Dahal</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/kp.png" alt="North Korea Flag"></td><td>North Korea</td><td class="leader">Supreme Leader Kim Jong-un</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/om.png" alt="Oman Flag"></td><td>Oman</td><td class="leader">Sultan Haitham bin Tariq</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/pk.png" alt="Pakistan Flag"></td><td>Pakistan</td><td class="leader">Prime Minister Shehbaz Sharif</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ps.png" alt="Palestine Flag"></td><td>Palestine</td><td class="leader">President Mahmoud Abbas</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ph.png" alt="Philippines Flag"></td><td>Philippines</td><td class="leader">President Bongbong Marcos</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/qa.png" alt="Qatar Flag"></td><td>Qatar</td><td class="leader">Emir Tamim bin Hamad Al Thani</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ru.png" alt="Russia Flag"></td><td>Russia</td><td class="leader">President Vladimir Putin</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sa.png" alt="Saudi Arabia Flag"></td><td>Saudi Arabia</td><td class="leader">King Salman bin Abdulaziz Al Saud</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sg.png" alt="Singapore Flag"></td><td>Singapore</td><td class="leader">Prime Minister Lawrence Wong</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/kr.png" alt="South Korea Flag"></td><td>South Korea</td><td class="leader">President Lee Jae-myung</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/lk.png" alt="Sri Lanka Flag"></td><td>Sri Lanka</td><td class="leader">President Ranil Wickremesinghe</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sy.png" alt="Syria Flag"></td><td>Syria</td><td class="leader">President Bashar al-Assad</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tw.png" alt="Taiwan Flag"></td><td>Taiwan</td><td class="leader">President Lai Ching-te</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tj.png" alt="Tajikistan Flag"></td><td>Tajikistan</td><td class="leader">President Emomali Rahmon</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/th.png" alt="Thailand Flag"></td><td>Thailand</td><td class="leader">Prime Minister Paetongtarn Shinawatra</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tl.png" alt="Timor-Leste Flag"></td><td>Timor-Leste</td><td class="leader">President José Ramos-Horta</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tr.png" alt="Turkey Flag"></td><td>Turkey</td><td class="leader">President Recep Tayyip Erdoğan</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tm.png" alt="Turkmenistan Flag"></td><td>Turkmenistan</td><td class="leader">President Serdar Berdimuhamedow</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ae.png" alt="United Arab Emirates Flag"></td><td>United Arab Emirates</td><td class="leader">President Mohamed bin Zayed Al Nahyan</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/uz.png" alt="Uzbekistan Flag"></td><td>Uzbekistan</td><td class="leader">President Shavkat Mirziyoyev</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/vn.png" alt="Vietnam Flag"></td><td>Vietnam</td><td class="leader">President Lương Cường</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+    <div class="continents-grid">
+        <div class="continent" id="asia">
+            <h2>Asia <span class="toggle-icon">+</span></h2>
+            <div class="countries-list">
+                <table>
+                    <thead><tr><th>Flag</th><th>Country</th><th>Leaders</th></tr></thead>
+                    <tbody>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/af.png" alt="Afghanistan Flag"></td><td>Afghanistan</td><td class="leader">Acting Prime Minister Abdul Kabir</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/am.png" alt="Armenia Flag"></td><td>Armenia</td><td class="leader">Prime Minister Nikol Pashinyan</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/az.png" alt="Azerbaijan Flag"></td><td>Azerbaijan</td><td class="leader">President Ilham Aliyev</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bh.png" alt="Bahrain Flag"></td><td>Bahrain</td><td class="leader">King Hamad bin Isa Al Khalifa</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bd.png" alt="Bangladesh Flag"></td><td>Bangladesh</td><td class="leader">Chief Adviser Muhammad Yunus</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bt.png" alt="Bhutan Flag"></td><td>Bhutan</td><td class="leader">Prime Minister Lotay Tshering</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bn.png" alt="Brunei Flag"></td><td>Brunei</td><td class="leader">Sultan Hassanal Bolkiah</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/kh.png" alt="Cambodia Flag"></td><td>Cambodia</td><td class="leader">Prime Minister Hun Manet</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cn.png" alt="China Flag"></td><td>China</td><td class="leader">President Xi Jinping</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cy.png" alt="Cyprus Flag"></td><td>Cyprus</td><td class="leader">President Nikos Christodoulides</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ge.png" alt="Georgia Flag"></td><td>Georgia</td><td class="leader">Prime Minister Irakli Garibashvili</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/in.png" alt="India Flag"></td><td>India</td><td class="leader">Prime Minister Narendra Modi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/id.png" alt="Indonesia Flag"></td><td>Indonesia</td><td class="leader">President Prabowo Subianto</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ir.png" alt="Iran Flag"></td><td>Iran</td><td class="leader">President Ebrahim Raisi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/iq.png" alt="Iraq Flag"></td><td>Iraq</td><td class="leader">Prime Minister Mohammed Shia' Al Sudani</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/il.png" alt="Israel Flag"></td><td>Israel</td><td class="leader">Prime Minister Benjamin Netanyahu</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/jp.png" alt="Japan Flag"></td><td>Japan</td><td class="leader">Prime Minister Shigeru Ishiba</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/jo.png" alt="Jordan Flag"></td><td>Jordan</td><td class="leader">Prime Minister Bisher Al-Khasawneh</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/kz.png" alt="Kazakhstan Flag"></td><td>Kazakhstan</td><td class="leader">President Kassym-Jomart Tokayev</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/kw.png" alt="Kuwait Flag"></td><td>Kuwait</td><td class="leader">Prime Minister Ahmad Nawaf Al-Ahmad Al-Sabah</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/kg.png" alt="Kyrgyzstan Flag"></td><td>Kyrgyzstan</td><td class="leader">President Sadyr Japarov</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/la.png" alt="Laos Flag"></td><td>Laos</td><td class="leader">Prime Minister Sonexay Siphandone</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/lb.png" alt="Lebanon Flag"></td><td>Lebanon</td><td class="leader">Prime Minister Najib Mikati</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/my.png" alt="Malaysia Flag"></td><td>Malaysia</td><td class="leader">Prime Minister Anwar Ibrahim</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mv.png" alt="Maldives Flag"></td><td>Maldives</td><td class="leader">President Mohamed Muizzu</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mn.png" alt="Mongolia Flag"></td><td>Mongolia</td><td class="leader">Prime Minister Luvsannamsrain Oyun-Erdene</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mm.png" alt="Myanmar Flag"></td><td>Myanmar</td><td class="leader">Prime Minister Min Aung Hlaing</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/np.png" alt="Nepal Flag"></td><td>Nepal</td><td class="leader">Prime Minister Pushpa Kamal Dahal</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/kp.png" alt="North Korea Flag"></td><td>North Korea</td><td class="leader">Supreme Leader Kim Jong-un</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/om.png" alt="Oman Flag"></td><td>Oman</td><td class="leader">Sultan Haitham bin Tariq</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/pk.png" alt="Pakistan Flag"></td><td>Pakistan</td><td class="leader">Prime Minister Shehbaz Sharif</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ps.png" alt="Palestine Flag"></td><td>Palestine</td><td class="leader">President Mahmoud Abbas</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ph.png" alt="Philippines Flag"></td><td>Philippines</td><td class="leader">President Bongbong Marcos</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/qa.png" alt="Qatar Flag"></td><td>Qatar</td><td class="leader">Emir Tamim bin Hamad Al Thani</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ru.png" alt="Russia Flag"></td><td>Russia</td><td class="leader">President Vladimir Putin</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sa.png" alt="Saudi Arabia Flag"></td><td>Saudi Arabia</td><td class="leader">King Salman bin Abdulaziz Al Saud</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sg.png" alt="Singapore Flag"></td><td>Singapore</td><td class="leader">Prime Minister Lawrence Wong</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/kr.png" alt="South Korea Flag"></td><td>South Korea</td><td class="leader">President Lee Jae-myung</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/lk.png" alt="Sri Lanka Flag"></td><td>Sri Lanka</td><td class="leader">President Ranil Wickremesinghe</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sy.png" alt="Syria Flag"></td><td>Syria</td><td class="leader">President Bashar al-Assad</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tw.png" alt="Taiwan Flag"></td><td>Taiwan</td><td class="leader">President Lai Ching-te</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tj.png" alt="Tajikistan Flag"></td><td>Tajikistan</td><td class="leader">President Emomali Rahmon</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/th.png" alt="Thailand Flag"></td><td>Thailand</td><td class="leader">Prime Minister Paetongtarn Shinawatra</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tl.png" alt="Timor-Leste Flag"></td><td>Timor-Leste</td><td class="leader">President José Ramos-Horta</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tr.png" alt="Turkey Flag"></td><td>Turkey</td><td class="leader">President Recep Tayyip Erdoğan</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tm.png" alt="Turkmenistan Flag"></td><td>Turkmenistan</td><td class="leader">President Serdar Berdimuhamedow</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ae.png" alt="United Arab Emirates Flag"></td><td>United Arab Emirates</td><td class="leader">President Mohamed bin Zayed Al Nahyan</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/uz.png" alt="Uzbekistan Flag"></td><td>Uzbekistan</td><td class="leader">President Shavkat Mirziyoyev</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/vn.png" alt="Vietnam Flag"></td><td>Vietnam</td><td class="leader">President Lương Cường</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<div class="continent" id="africa">
-  <h2>Africa <span class="toggle-icon">+</span></h2>
-  <div class="countries-list">
-    <table>
-      <thead><tr><th>Flag</th><th>Country</th><th>Leader</th></tr></thead>
-      <tbody>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/dz.png" alt="Algeria Flag"></td><td>Algeria</td><td class="leader">President Abdelmadjid Tebboune</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ao.png" alt="Angola Flag"></td><td>Angola</td><td class="leader">President João Lourenço</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bj.png" alt="Benin Flag"></td><td>Benin</td><td class="leader">President Patrice Talon</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bw.png" alt="Botswana Flag"></td><td>Botswana</td><td class="leader">President Duma Boko</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bf.png" alt="Burkina Faso Flag"></td><td>Burkina Faso</td><td class="leader">President Ibrahim Traoré (Military junta)</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bi.png" alt="Burundi Flag"></td><td>Burundi</td><td class="leader">President Évariste Ndayishimiye</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cv.png" alt="Cape Verde Flag"></td><td>Cape Verde</td><td class="leader">President José Maria Neves</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cf.png" alt="Central African Republic Flag"></td><td>Central African Republic</td><td class="leader">President Faustin-Archange Touadéra</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/td.png" alt="Chad Flag"></td><td>Chad</td><td class="leader">President Mahamat Déby</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/km.png" alt="Comoros Flag"></td><td>Comoros</td><td class="leader">President Azali Assoumani</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cg.png" alt="Republic of the Congo Flag"></td><td>Republic of the Congo</td><td class="leader">President Denis Sassou Nguesso</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cd.png" alt="Democratic Republic of the Congo Flag"></td><td>Democratic Republic of the Congo</td><td class="leader">President Félix Tshisekedi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/dj.png" alt="Djibouti Flag"></td><td>Djibouti</td><td class="leader">President Ismaïl Omar Guelleh</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/eg.png" alt="Egypt Flag"></td><td>Egypt</td><td class="leader">President Abdel Fattah el-Sisi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gq.png" alt="Equatorial Guinea Flag"></td><td>Equatorial Guinea</td><td class="leader">President Teodoro Obiang Nguema Mbasogo</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/er.png" alt="Eritrea Flag"></td><td>Eritrea</td><td class="leader">President Isaias Afwerki</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sz.png" alt="Eswatini Flag"></td><td>Eswatini</td><td class="leader">King Mswati III</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/et.png" alt="Ethiopia Flag"></td><td>Ethiopia</td><td class="leader">President Sahle-Work Zewde</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ga.png" alt="Gabon Flag"></td><td>Gabon</td><td class="leader">President Brice Clotaire Oligui Nguema (Military junta)</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gm.png" alt="The Gambia Flag"></td><td>The Gambia</td><td class="leader">President Adama Barrow</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gh.png" alt="Ghana Flag"></td><td>Ghana</td><td class="leader">President John Mahama</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gn.png" alt="Guinea Flag"></td><td>Guinea</td><td class="leader">President Mamady Doumbouya (Military junta)</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gw.png" alt="Guinea-Bissau Flag"></td><td>Guinea-Bissau</td><td class="leader">President Umaro Sissoco Embaló</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ci.png" alt="Ivory Coast Flag"></td><td>Ivory Coast</td><td class="leader">President Alassane Ouattara</td></tr>
-        <tr><td><td><img class="flag" src="https://flagcdn.com/w40/ke.png" alt="Kenya Flag"></td><td>Kenya</td><td class="leader">President William Ruto</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ls.png" alt="Lesotho Flag"></td><td>Lesotho</td><td class="leader">King Letsie III</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/lr.png" alt="Liberia Flag"></td><td>Liberia</td><td class="leader">President George Weah</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ly.png" alt="Libya Flag"></td><td>Libya</td><td class="leader">President Mohamed al-Menfi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mg.png" alt="Madagascar Flag"></td><td>Madagascar</td><td class="leader">President Andry Rajoelina</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mw.png" alt="Malawi Flag"></td><td>Malawi</td><td class="leader">President Lazarus Chakwera</td></tr>
-        <tr><td><img class="flag" src794><td>Mali</td><td class="leader">President Assimi Goïta (Military junta)</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mr.png" alt="Mauritania Flag"></td><td>Mauritania</td><td class="leader">President Mohamed Ould Ghazouani</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mu.png" alt="Mauritius Flag"></td><td>Mauritius</td><td class="leader">President Prithvirajsing Roopun</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ma.png" alt="Morocco Flag"></td><td>Morocco</td><td class="leader">King Mohammed VI</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mz.png" alt="Mozambique Flag"></td><td>Mozambique</td><td class="leader">President Filipe Nyusi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/na.png" alt="Namibia Flag"></td><td>Namibia</td><td class="leader">President Netumbo Nandi-Ndaitwah</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ne.png" alt="Niger Flag"></td><td>Niger</td><td class="leader">President Abdourahamane Tchiani (Military junta)</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ng.png" alt="Nigeria Flag"></td><td>Nigeria</td><td class="leader">President Bola Tinubu</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/rw.png" alt="Rwanda Flag"></td><td>Rwanda</td><td class="leader">President Paul Kagame</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/st.png" alt="São Tomé and Príncipe Flag"></td><td>São Tomé and Príncipe</td><td class="leader">President Carlos Vila Nova</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sn.png" alt="Senegal Flag"></td><td>Senegal</td><td class="leader">President Bassirou Diomaye Faye</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sc.png" alt="Seychelles Flag"></td><td>Seychelles</td><td class="leader">President Wavel Ramkalawan</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sl.png" alt="Sierra Leone Flag"></td><td>Sierra Leone</td><td class="leader">President Julius Maada Bio</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/so.png" alt="Somalia Flag"></td><td>Somalia</td><td class="leader">President Hassan Sheikh Mohamud</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/za.png" alt="South Africa Flag"></td><td>South Africa</td><td class="leader">President Cyril Ramaphosa</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ss.png" alt="South Sudan Flag"></td><td>South Sudan</td><td class="leader">President Salva Kiir Mayardit</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sd.png" alt="Sudan Flag"></td><td>Sudan</td><td class="leader">President Abdel Fattah al-Burhan (Military junta)</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tz.png" alt="Tanzania Flag"></td><td>Tanzania</td><td class="leader">President Samia Suluhu Hassan</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tg.png" alt="Togo Flag"></td><td>Togo</td><td class="leader">President Faure Gnassingbé</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tn.png" alt="Tunisia Flag"></td><td>Tunisia</td><td class="leader">President Kais Saied</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ug.png" alt="Uganda Flag"></td><td>Uganda</td><td class="leader">President Yoweri Museveni</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/zm.png" alt="Zambia Flag"></td><td>Zambia</td><td class="leader">President Hakainde Hichilema</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/zw.png" alt="Zimbabwe Flag"></td><td>Zimbabwe</td><td class="leader">President Emmerson Mnangagwa</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+        <div class="continent" id="africa">
+            <h2>Africa <span class="toggle-icon">+</span></h2>
+            <div class="countries-list">
+                <table>
+                    <thead><tr><th>Flag</th><th>Country</th><th>Leaders</th></tr></thead>
+                    <tbody>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/dz.png" alt="Algeria Flag"></td><td>Algeria</td><td class="leader">President Abdelmadjid Tebboune</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ao.png" alt="Angola Flag"></td><td>Angola</td><td class="leader">President João Lourenço</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bj.png" alt="Benin Flag"></td><td>Benin</td><td class="leader">President Patrice Talon</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bw.png" alt="Botswana Flag"></td><td>Botswana</td><td class="leader">President Duma Boko</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bf.png" alt="Burkina Faso Flag"></td><td>Burkina Faso</td><td class="leader">President Ibrahim Traoré (Military junta)</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bi.png" alt="Burundi Flag"></td><td>Burundi</td><td class="leader">President Évariste Ndayishimiye</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cv.png" alt="Cape Verde Flag"></td><td>Cape Verde</td><td class="leader">President José Maria Neves</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cf.png" alt="Central African Republic Flag"></td><td>Central African Republic</td><td class="leader">President Faustin-Archange Touadéra</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/td.png" alt="Chad Flag"></td><td>Chad</td><td class="leader">President Mahamat Déby</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/km.png" alt="Comoros Flag"></td><td>Comoros</td><td class="leader">President Azali Assoumani</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cg.png" alt="Republic of the Congo Flag"></td><td>Republic of the Congo</td><td class="leader">President Denis Sassou Nguesso</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cd.png" alt="Democratic Republic of the Congo Flag"></td><td>Democratic Republic of the Congo</td><td class="leader">President Félix Tshisekedi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/dj.png" alt="Djibouti Flag"></td><td>Djibouti</td><td class="leader">President Ismaïl Omar Guelleh</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/eg.png" alt="Egypt Flag"></td><td>Egypt</td><td class="leader">President Abdel Fattah el-Sisi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gq.png" alt="Equatorial Guinea Flag"></td><td>Equatorial Guinea</td><td class="leader">President Teodoro Obiang Nguema Mbasogo</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/er.png" alt="Eritrea Flag"></td><td>Eritrea</td><td class="leader">President Isaias Afwerki</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sz.png" alt="Eswatini Flag"></td><td>Eswatini</td><td class="leader">King Mswati III</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/et.png" alt="Ethiopia Flag"></td><td>Ethiopia</td><td class="leader">President Sahle-Work Zewde</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ga.png" alt="Gabon Flag"></td><td>Gabon</td><td class="leader">President Brice Clotaire Oligui Nguema (Military junta)</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gm.png" alt="The Gambia Flag"></td><td>The Gambia</td><td class="leader">President Adama Barrow</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gh.png" alt="Ghana Flag"></td><td>Ghana</td><td class="leader">President John Mahama</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gn.png" alt="Guinea Flag"></td><td>Guinea</td><td class="leader">President Mamady Doumbouya (Military junta)</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gw.png" alt="Guinea-Bissau Flag"></td><td>Guinea-Bissau</td><td class="leader">President Umaro Sissoco Embaló</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ci.png" alt="Ivory Coast Flag"></td><td>Ivory Coast</td><td class="leader">President Alassane Ouattara</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ke.png" alt="Kenya Flag"></td><td>Kenya</td><td class="leader">President William Ruto</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ls.png" alt="Lesotho Flag"></td><td>Lesotho</td><td class="leader">King Letsie III</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/lr.png" alt="Liberia Flag"></td><td>Liberia</td><td class="leader">President George Weah</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ly.png" alt="Libya Flag"></td><td>Libya</td><td class="leader">President Mohamed al-Menfi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mg.png" alt="Madagascar Flag"></td><td>Madagascar</td><td class="leader">President Andry Rajoelina</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mw.png" alt="Malawi Flag"></td><td>Malawi</td><td class="leader">President Lazarus Chakwera</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ml.png" alt="Mali Flag"></td><td>Mali</td><td class="leader">President Assimi Goïta (Military junta)</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mr.png" alt="Mauritania Flag"></td><td>Mauritania</td><td class="leader">President Mohamed Ould Ghazouani</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mu.png" alt="Mauritius Flag"></td><td>Mauritius</td><td class="leader">President Prithvirajsing Roopun</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ma.png" alt="Morocco Flag"></td><td>Morocco</td><td class="leader">King Mohammed VI</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mz.png" alt="Mozambique Flag"></td><td>Mozambique</td><td class="leader">President Filipe Nyusi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/na.png" alt="Namibia Flag"></td><td>Namibia</td><td class="leader">President Netumbo Nandi-Ndaitwah</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ne.png" alt="Niger Flag"></td><td>Niger</td><td class="leader">President Abdourahamane Tchiani (Military junta)</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ng.png" alt="Nigeria Flag"></td><td>Nigeria</td><td class="leader">President Bola Tinubu</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/rw.png" alt="Rwanda Flag"></td><td>Rwanda</td><td class="leader">President Paul Kagame</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/st.png" alt="São Tomé and Príncipe Flag"></td><td>São Tomé and Príncipe</td><td class="leader">President Carlos Vila Nova</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sn.png" alt="Senegal Flag"></td><td>Senegal</td><td class="leader">President Bassirou Diomaye Faye</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sc.png" alt="Seychelles Flag"></td><td>Seychelles</td><td class="leader">President Wavel Ramkalawan</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sl.png" alt="Sierra Leone Flag"></td><td>Sierra Leone</td><td class="leader">President Julius Maada Bio</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/so.png" alt="Somalia Flag"></td><td>Somalia</td><td class="leader">President Hassan Sheikh Mohamud</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/za.png" alt="South Africa Flag"></td><td>South Africa</td><td class="leader">President Cyril Ramaphosa</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ss.png" alt="South Sudan Flag"></td><td>South Sudan</td><td class="leader">President Salva Kiir Mayardit</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sd.png" alt="Sudan Flag"></td><td>Sudan</td><td class="leader">President Abdel Fattah al-Burhan (Military junta)</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tz.png" alt="Tanzania Flag"></td><td>Tanzania</td><td class="leader">President Samia Suluhu Hassan</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tg.png" alt="Togo Flag"></td><td>Togo</td><td class="leader">President Faure Gnassingbé</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tn.png" alt="Tunisia Flag"></td><td>Tunisia</td><td class="leader">President Kais Saied</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ug.png" alt="Uganda Flag"></td><td>Uganda</td><td class="leader">President Yoweri Museveni</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/zm.png" alt="Zambia Flag"></td><td>Zambia</td><td class="leader">President Hakainde Hichilema</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/zw.png" alt="Zimbabwe Flag"></td><td>Zimbabwe</td><td class="leader">President Emmerson Mnangagwa</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<div class="continent" id="north-america">
-  <h2>North America <span class="toggle-icon">+</span></h2>
-  <div class="countries-list">
-    <table>
-      <thead><tr><th>Flag</th><th>Country</th><th>Leader</th></tr></thead>
-      <tbody>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ag.png" alt="Antigua and Barbuda Flag"></td><td>Antigua and Barbuda</td><td class="leader">Monarch King Charles III, Governor-General Sir Rodney Williams, Prime Minister Gaston Browne</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bs.png" alt="Bahamas Flag"></td><td>Bahamas</td><td class="leader">Monarch King Charles III, Governor-General Cynthia Pratt, Prime Minister Philip Davis</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bb.png" alt="Barbados Flag"></td><td>Barbados</td><td class="leader">President Sandra Mason, Prime Minister Mia Mottley</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bz.png" alt="Belize Flag"></td><td>Belize</td><td class="leader">Monarch King Charles III, Governor-General Froyla Tzalam, Prime Minister Johnny Briceño</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ca.png" alt="Canada Flag"></td><td>Canada</td><td class="leader">Monarch King Charles III, Governor-General Mary Simon, Prime Minister Mark Carney</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cr.png" alt="Costa Rica Flag"></td><td>Costa Rica</td><td class="leader">President Rodrigo Chaves Robles</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cu.png" alt="Cuba Flag"></td><td>Cuba</td><td class="leader">President Miguel Díaz-Canel, Prime Minister Manuel Marrero Cruz</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/dm.png" alt="Dominica Flag"></td><td>Dominica</td><td class="leader">President Sylvanie Burton, Prime Minister Roosevelt Skerrit</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/do.png" alt="Dominican Republic Flag"></td><td>Dominican Republic</td><td class="leader">President Luis Abinader</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sv.png" alt="El Salvador Flag"></td><td>El Salvador</td><td class="leader">President Nayib Bukele</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gd.png" alt="Grenada Flag"></td><td>Grenada</td><td class="leader">Monarch King Charles III, Governor-General Cécile La Grenade, Prime Minister Dickon Mitchell</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gt.png" alt="Guatemala Flag"></td><td>Guatemala</td><td class="leader">President Bernardo Arévalo</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ht.png" alt="Haiti Flag"></td><td>Haiti</td><td class="leader">President Vacant, Prime Minister Ariel Henry</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/hn.png" alt="Honduras Flag"></td><td>Honduras</td><td class="leader">President Xiomara Castro</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/jm.png" alt="Jamaica Flag"></td><td>Jamaica</td><td class="leader">Monarch King Charles III, Governor-General Patrick Allen, Prime Minister Andrew Holness</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mx.png" alt="Mexico Flag"></td><td>Mexico</td><td class="leader">President Andrés Manuel López Obrador</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ni.png" alt="Nicaragua Flag"></td><td>Nicagua</td><td class="leader">Co-Presidents Daniel Ortega and Rosario Murillo</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/pa.png" alt="Panama Flag"></td><td>Panama</td><td class="leader">President José Raúl Mulino</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/kn.png" alt="Saint Kitts and Nevis Flag"></td><td>Saint Kitts and Nevis</td><td class="leader">Monarch King Charles III, Governor-General Marcella Liburd, Prime Minister Terrance Drew</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/lc.png" alt="Saint Lucia Flag"></td><td>Saint Lucia</td><td class="leader">Monarch King Charles III, Governor-General Errol Charles, Prime Minister Philip J. Pierre</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/vc.png" alt="Saint Vincent and the Grenadines Flag"></td><td>Saint Vincent and the Grenadines</td><td class="leader">Monarch King Charles III, Governor-General Susan Dougan, Prime Minister Ralph Gonsalves</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tt.png" alt="Trinidad and Tobago Flag"></td><td>Trinidad and Tobago</td><td class="leader">President Christine Kangaloo, Prime Minister Kamla Persad-Bissessar</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/us.png" alt="United States Flag"></td><td>United States</td><td class="leader">President Donald Trump, Vice President JD Vance</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+        <div class="continent" id="north-america">
+            <h2>North America <span class="toggle-icon">+</span></h2>
+            <div class="countries-list">
+                <table>
+                    <thead><tr><th>Flag</th><th>Country</th><th>Leaders</th></tr></thead>
+                    <tbody>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ag.png" alt="Antigua and Barbuda Flag"></td><td>Antigua and Barbuda</td><td class="leader">Monarch King Charles III, Governor-General Sir Rodney Williams, Prime Minister Gaston Browne</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bs.png" alt="Bahamas Flag"></td><td>Bahamas</td><td class="leader">Monarch King Charles III, Governor-General Cynthia Pratt, Prime Minister Philip Davis</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bb.png" alt="Barbados Flag"></td><td>Barbados</td><td class="leader">President Sandra Mason, Prime Minister Mia Mottley</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bz.png" alt="Belize Flag"></td><td>Belize</td><td class="leader">Monarch King Charles III, Governor-General Froyla Tzalam, Prime Minister Johnny Briceño</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ca.png" alt="Canada Flag"></td><td>Canada</td><td class="leader">Monarch King Charles III, Governor-General Mary Simon, Prime Minister Mark Carney</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cr.png" alt="Costa Rica Flag"></td><td>Costa Rica</td><td class="leader">President Rodrigo Chaves Robles</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cu.png" alt="Cuba Flag"></td><td>Cuba</td><td class="leader">President Miguel Díaz-Canel, Prime Minister Manuel Marrero Cruz</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/dm.png" alt="Dominica Flag"></td><td>Dominica</td><td class="leader">President Sylvanie Burton, Prime Minister Roosevelt Skerrit</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/do.png" alt="Dominican Republic Flag"></td><td>Dominican Republic</td><td class="leader">President Luis Abinader</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sv.png" alt="El Salvador Flag"></td><td>El Salvador</td><td class="leader">President Nayib Bukele</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gd.png" alt="Grenada Flag"></td><td>Grenada</td><td class="leader">Monarch King Charles III, Governor-General Cécile La Grenade, Prime Minister Dickon Mitchell</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gt.png" alt="Guatemala Flag"></td><td>Guatemala</td><td class="leader">President Bernardo Arévalo</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ht.png" alt="Haiti Flag"></td><td>Haiti</td><td class="leader">President Vacant, Prime Minister Ariel Henry</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/hn.png" alt="Honduras Flag"></td><td>Honduras</td><td class="leader">President Xiomara Castro</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/jm.png" alt="Jamaica Flag"></td><td>Jamaica</td><td class="leader">Monarch King Charles III, Governor-General Patrick Allen, Prime Minister Andrew Holness</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mx.png" alt="Mexico Flag"></td><td>Mexico</td><td class="leader">President Andrés Manuel López Obrador</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ni.png" alt="Nicaragua Flag"></td><td>Nicaragua</td><td class="leader">Co-Presidents Daniel Ortega and Rosario Murillo</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/pa.png" alt="Panama Flag"></td><td>Panama</td><td class="leader">President José Raúl Mulino</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/kn.png" alt="Saint Kitts and Nevis Flag"></td><td>Saint Kitts and Nevis</td><td class="leader">Monarch King Charles III, Governor-General Marcella Liburd, Prime Minister Terrance Drew</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/lc.png" alt="Saint Lucia Flag"></td><td>Saint Lucia</td><td class="leader">Monarch King Charles III, Governor-General Errol Charles, Prime Minister Philip J. Pierre</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/vc.png" alt="Saint Vincent and the Grenadines Flag"></td><td>Saint Vincent and the Grenadines</td><td class="leader">Monarch King Charles III, Governor-General Susan Dougan, Prime Minister Ralph Gonsalves</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tt.png" alt="Trinidad and Tobago Flag"></td><td>Trinidad and Tobago</td><td class="leader">President Christine Kangaloo, Prime Minister Kamla Persad-Bissessar</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/us.png" alt="United States Flag"></td><td>United States</td><td class="leader">President Donald Trump, Vice President JD Vance</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<div class="continent" id="south-america">
-  <h2>South America <span class="toggle-icon">+</span></h2>
-  <div class="countries-list">
-    <table>
-      <thead><tr><th>Flag</th><th>Country</th><th>Leader</th></tr></thead>
-      <tbody>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ar.png" alt="Argentina Flag"></td><td>Argentina</td><td class="leader">President Javier Milei</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bo.png" alt="Bolivia Flag"></td><td>Bolivia</td><td class="leader">President Luis Arce</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/br.png" alt="Brazil Flag"></td><td>Brazil</td><td class="leader">President Luiz Inácio Lula da Silva</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile Flag"></td><td>Chile</td><td class="leader">President Gabriel Boric</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/co.png" alt="Colombia Flag"></td><td>Colombia</td><td class="leader">President Gustavo Petro</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ec.png" alt="Ecuador Flag"></td><td>Ecuador</td><td class="leader">President Daniel Noboa</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gy.png" alt="Guyana Flag"></td><td>Guyana</td><td class="leader">President Irfaan Ali</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/py.png" alt="Paraguay Flag"></td><td>Paraguay</td><td class="leader">President Santiago Peña</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/pe.png" alt="Peru Flag"></td><td>Peru</td><td class="leader">President Dina Boluarte</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sr.png" alt="Suriname Flag"></td><td>Suriname</td><td class="leader">President Chan Santokhi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/uy.png" alt="Uruguay Flag"></td><td>Uruguay</td><td class="leader">President Yamandú Orsi</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ve.png" alt="Venezuela Flag"></td><td>Venezuela</td><td class="leader">President Nicolás Maduro</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+        <div class="continent" id="south-america">
+            <h2>South America <span class="toggle-icon">+</span></h2>
+            <div class="countries-list">
+                <table>
+                    <thead><tr><th>Flag</th><th>Country</th><th>Leaders</th></tr></thead>
+                    <tbody>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ar.png" alt="Argentina Flag"></td><td>Argentina</td><td class="leader">President Javier Milei</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bo.png" alt="Bolivia Flag"></td><td>Bolivia</td><td class="leader">President Luis Arce</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/br.png" alt="Brazil Flag"></td><td>Brazil</td><td class="leader">President Luiz Inácio Lula da Silva</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cl.png" alt="Chile Flag"></td><td>Chile</td><td class="leader">President Gabriel Boric</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/co.png" alt="Colombia Flag"></td><td>Colombia</td><td class="leader">President Gustavo Petro</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ec.png" alt="Ecuador Flag"></td><td>Ecuador</td><td class="leader">President Daniel Noboa</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gy.png" alt="Guyana Flag"></td><td>Guyana</td><td class="leader">President Irfaan Ali</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/py.png" alt="Paraguay Flag"></td><td>Paraguay</td><td class="leader">President Santiago Peña</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/pe.png" alt="Peru Flag"></td><td>Peru</td><td class="leader">President Dina Boluarte</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sr.png" alt="Suriname Flag"></td><td>Suriname</td><td class="leader">President Chan Santokhi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/uy.png" alt="Uruguay Flag"></td><td>Uruguay</td><td class="leader">President Yamandú Orsi</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ve.png" alt="Venezuela Flag"></td><td>Venezuela</td><td class="leader">President Nicolás Maduro</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<div class="continent" id="europe">
-  <h2>Europe <span class="toggle-icon">+</span></h2>
-  <div class="countries-list">
-    <table>
-      <thead><tr><th>Flag</th><th>Country</th><th>Leader</th></tr></thead>
-      <tbody>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/al.png" alt="Albania Flag"></td><td>Albania</td><td class="leader">President Bajram Begaj, Prime Minister Edi Rama</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ad.png" alt="Andorra Flag"></td><td>Andorra</td><td class="leader">Co-Princes Emmanuel Macron and Joan Enric Vives Sicília, Head of Government Xavier Espot Zamora</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/am.png" alt="Armenia Flag"></td><td>Armenia</td><td class="leader">President Vahagn Khachaturyan, Prime Minister Nikol Pashinyan</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/at.png" alt="Austria Flag"></td><td>Austria</td><td class="leader">President Alexander Van der Bellen, Chancellor Christian Stocker</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/az.png" alt="Azerbaijan Flag"></td><td>Azerbaijan</td><td class="leader">President Ilham Aliyev, Prime Minister Ali Asadov</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/by.png" alt="Belarus Flag"></td><td>Belarus</td><td class="leader">President Alexander Lukashenko, Prime Minister Roman Golovchenko</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/be.png" alt="Belgium Flag"></td><td>Belgium</td><td class="leader">King Philippe, Prime Minister Bart De Wever</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ba.png" alt="Bosnia and Herzegovina Flag"></td><td>Bosnia and Herzegovina</td><td class="leader">Presidency Members Željko Komšić, Denis Bećirović, Željka Cvijanović, Chairman of the Council of Ministers Borjana Krišto</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/bg.png" alt="Bulgaria Flag"></td><td>Bulgaria</td><td class="leader">President Rumen Radev, Prime Minister Rossen Jeliazkov</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/hr.png" alt="Croatia Flag"></td><td>Croatia</td><td class="leader">President Zoran Milanović, Prime Minister Andrej Plenković</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cy.png" alt="Cyprus Flag"></td><td>Cyprus</td><td class="leader">President Nikos Christodoulides</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/cz.png" alt="Czech Republic Flag"></td><td>Czech Republic</td><td class="leader">President Petr Pavel, Prime Minister Petr Fiala</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/dk.png" alt="Denmark Flag"></td><td>Denmark</td><td class="leader">Monarch Queen Margrethe II, Prime Minister Mette Frederiksen</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ee.png" alt="Estonia Flag"></td><td>Estonia</td><td class="leader">President Alar Karis, Prime Minister Kristen Michal</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/fi.png" alt="Finland Flag"></td><td>Finland</td><td class="leader">President Alexander Stubb, Prime Minister Petteri Orpo</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/fr.png" alt="France Flag"></td><td>France</td><td class="leader">President Emmanuel Macron, Prime Minister François Bayrou</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ge.png" alt="Georgia Flag"></td><td>Georgia</td><td class="leader">President Mikheil Kavelashvili, Prime Minister Irakli Kobakhidze</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/de.png" alt="Germany Flag"></td><td>Germany</td><td class="leader">President Frank-Walter Steinmeier, Chancellor Friedrich Merz</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gr.png" alt="Greece Flag"></td><td>Greece</td><td class="leader">President Konstantinos Tasoulas, Prime Minister Kyriakos Mitsotakis</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/hu.png" alt="Hungary Flag"></td><td>Hungary</td><td class="leader">President Tamás Sulyok, Prime Minister Viktor Orbán</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/is.png" alt="Iceland Flag"></td><td>Iceland</td><td class="leader">President Guðni Th. Jóhannesson, Prime Minister Kristrún Frostadóttir</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ie.png" alt="Ireland Flag"></td><td>Ireland</td><td class="leader">President Michael D. Higgins, Taoiseach Micheál Martin</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/it.png" alt="Italy Flag"></td><td>Italy</td><td class="leader">President Sergio Mattarella, Prime Minister Giorgia Meloni</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/xk.png" alt="Kosovo Flag"></td><td>Kosovo</td><td class="leader">President Vjosa Osmani, Prime Minister Albin Kurti</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/lv.png" alt="Latvia Flag"></td><td>Latvia</td><td class="leader">President Edgars Rinkēvičs, Prime Minister Evika Siliņa</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/li.png" alt="Liechtenstein Flag"></td><td>Liechtenstein</td><td class="leader">Prince Hans-Adam II, Prime Minister Brigitte Haas</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/lt.png" alt="Lithuania Flag"></td><td>Lithuania</td><td class="leader">President Gitanas Nausėda, Prime Minister Gintautas Paluckas</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/lu.png" alt="Luxembourg Flag"></td><td>Luxembourg</td><td class="leader">Grand Duke Henri, Prime Minister Luc Frieden</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mt.png" alt="Malta Flag"></td><td>Malta</td><td class="leader">President George Vella, Prime Minister Robert Abela</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/md.png" alt="Moldova Flag"></td><td>Moldova</td><td class="leader">President Maia Sandu, Prime Minister Dorin Recean</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mc.png" alt="Monaco Flag"></td><td>Monaco</td><td class="leader">Prince Albert II, Minister of State Isabelle Berro-Amadeï</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/me.png" alt="Montenegro Flag"></td><td>Montenegro</td><td class="leader">President Jakov Milatović, Prime Minister Milojko Spajić</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/nl.png" alt="Netherlands Flag"></td><td>Netherlands</td><td class="leader">King Willem-Alexander, Prime Minister Dick Schoof</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mk.png" alt="North Macedonia Flag"></td><td>North Macedonia</td><td class="leader">President Stevo Pendarovski, Prime Minister Hristijan Mickoski</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/no.png" alt="Norway Flag"></td><td>Norway</td><td class="leader">King Harald V, Prime Minister Jonas Gahr Støre</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/pl.png" alt="Poland Flag"></td><td>Poland</td><td class="leader">President Andrzej Duda, Prime Minister Donald Tusk</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/pt.png" alt="Portugal Flag"></td><td>Portugal</td><td class="leader">President Marcelo Rebelo de Sousa, Prime Minister Luís Montenegro</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ro.png" alt="Romania Flag"></td><td>Romania</td><td class="leader">President Klaus Iohannis, Prime Minister Nicușor Dan</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ru.png" alt="Russia Flag"></td><td>Russia</td><td class="leader">President Vladimir Putin, Prime Minister Mikhail Mishustin</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sm.png" alt="San Marino Flag"></td><td>San Marino</td><td class="leader">Captains Regent (Elected every six months)</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/rs.png" alt="Serbia Flag"></td><td>Serbia</td><td class="leader">President Aleksandar Vučić, Prime Minister Djuro Macut</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sk.png" alt="Slovakia Flag"></td><td>Slovakia</td><td class="leader">President Peter Pellegrini, Prime Minister Robert Fico</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/si.png" alt="Slovenia Flag"></td><td>Slovenia</td><td class="leader">President Nataša Pirc Musar, Prime Minister Robert Golob</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/es.png" alt="Spain Flag"></td><td>Spain</td><td class="leader">King Felipe VI, Prime Minister Pedro Sánchez</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/se.png" alt="Sweden Flag"></td><td>Sweden</td><td class="leader">King Carl XVI Gustaf, Prime Minister Ulf Kristersson</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ch.png" alt="Switzerland Flag"></td><td>Switzerland</td><td class="leader">President of the Confederation Karin Keller-Sutter</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ua.png" alt="Ukraine Flag"></td><td>Ukraine</td><td class="leader">President Volodymyr Zelenskyy, Prime Minister Denys Shmyhal</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/gb.png" alt="United Kingdom Flag"></td><td>United Kingdom</td><td class="leader">Monarch King Charles III, Prime Minister Keir Starmer</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+        <div class="continent" id="europe">
+            <h2>Europe <span class="toggle-icon">+</span></h2>
+            <div class="countries-list">
+                <table>
+                    <thead><tr><th>Flag</th><th>Country</th><th>Leaders</th></tr></thead>
+                    <tbody>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/al.png" alt="Albania Flag"></td><td>Albania</td><td class="leader">President Bajram Begaj, Prime Minister Edi Rama</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ad.png" alt="Andorra Flag"></td><td>Andorra</td><td class="leader">Co-Princes Emmanuel Macron and Joan Enric Vives Sicília, Head of Government Xavier Espot Zamora</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/am.png" alt="Armenia Flag"></td><td>Armenia</td><td class="leader">President Vahagn Khachaturyan, Prime Minister Nikol Pashinyan</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/at.png" alt="Austria Flag"></td><td>Austria</td><td class="leader">President Alexander Van der Bellen, Chancellor Christian Stocker</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/az.png" alt="Azerbaijan Flag"></td><td>Azerbaijan</td><td class="leader">President Ilham Aliyev, Prime Minister Ali Asadov</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/by.png" alt="Belarus Flag"></td><td>Belarus</td><td class="leader">President Alexander Lukashenko, Prime Minister Roman Golovchenko</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/be.png" alt="Belgium Flag"></td><td>Belgium</td><td class="leader">King Philippe, Prime Minister Bart De Wever</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ba.png" alt="Bosnia and Herzegovina Flag"></td><td>Bosnia and Herzegovina</td><td class="leader">Presidency Members Željko Komšić, Denis Bećirović, Željka Cvijanović, Chairman of the Council of Ministers Borjana Krišto</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/bg.png" alt="Bulgaria Flag"></td><td>Bulgaria</td><td class="leader">President Rumen Radev, Prime Minister Rossen Jeliazkov</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/hr.png" alt="Croatia Flag"></td><td>Croatia</td><td class="leader">President Zoran Milanović, Prime Minister Andrej Plenković</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cy.png" alt="Cyprus Flag"></td><td>Cyprus</td><td class="leader">President Nikos Christodoulides</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/cz.png" alt="Czech Republic Flag"></td><td>Czech Republic</td><td class="leader">President Petr Pavel, Prime Minister Petr Fiala</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/dk.png" alt="Denmark Flag"></td><td>Denmark</td><td class="leader">Monarch Queen Margrethe II, Prime Minister Mette Frederiksen</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ee.png" alt="Estonia Flag"></td><td>Estonia</td><td class="leader">President Alar Karis, Prime Minister Kristen Michal</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/fi.png" alt="Finland Flag"></td><td>Finland</td><td class="leader">President Alexander Stubb, Prime Minister Petteri Orpo</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/fr.png" alt="France Flag"></td><td>France</td><td class="leader">President Emmanuel Macron, Prime Minister François Bayrou</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ge.png" alt="Georgia Flag"></td><td>Georgia</td><td class="leader">President Mikheil Kavelashvili, Prime Minister Irakli Kobakhidze</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/de.png" alt="Germany Flag"></td><td>Germany</td><td class="leader">President Frank-Walter Steinmeier, Chancellor Friedrich Merz</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gr.png" alt="Greece Flag"></td><td>Greece</td><td class="leader">President Konstantinos Tasoulas, Prime Minister Kyriakos Mitsotakis</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/hu.png" alt="Hungary Flag"></td><td>Hungary</td><td class="leader">President Tamás Sulyok, Prime Minister Viktor Orbán</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/is.png" alt="Iceland Flag"></td><td>Iceland</td><td class="leader">President Guðni Th. Jóhannesson, Prime Minister Kristrún Frostadóttir</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ie.png" alt="Ireland Flag"></td><td>Ireland</td><td class="leader">President Michael D. Higgins, Taoiseach Micheál Martin</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/it.png" alt="Italy Flag"></td><td>Italy</td><td class="leader">President Sergio Mattarella, Prime Minister Giorgia Meloni</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/xk.png" alt="Kosovo Flag"></td><td>Kosovo</td><td class="leader">President Vjosa Osmani, Prime Minister Albin Kurti</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/lv.png" alt="Latvia Flag"></td><td>Latvia</td><td class="leader">President Edgars Rinkēvičs, Prime Minister Evika Siliņa</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/li.png" alt="Liechtenstein Flag"></td><td>Liechtenstein</td><td class="leader">Prince Hans-Adam II, Prime Minister Brigitte Haas</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/lt.png" alt="Lithuania Flag"></td><td>Lithuania</td><td class="leader">President Gitanas Nausėda, Prime Minister Gintautas Paluckas</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/lu.png" alt="Luxembourg Flag"></td><td>Luxembourg</td><td class="leader">Grand Duke Henri, Prime Minister Luc Frieden</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mt.png" alt="Malta Flag"></td><td>Malta</td><td class="leader">President George Vella, Prime Minister Robert Abela</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/md.png" alt="Moldova Flag"></td><td>Moldova</td><td class="leader">President Maia Sandu, Prime Minister Dorin Recean</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mc.png" alt="Monaco Flag"></td><td>Monaco</td><td class="leader">Prince Albert II, Minister of State Isabelle Berro-Amadeï</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/me.png" alt="Montenegro Flag"></td><td>Montenegro</td><td class="leader">President Jakov Milatović, Prime Minister Milojko Spajić</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/nl.png" alt="Netherlands Flag"></td><td>Netherlands</td><td class="leader">King Willem-Alexander, Prime Minister Dick Schoof</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mk.png" alt="North Macedonia Flag"></td><td>North Macedonia</td><td class="leader">President Stevo Pendarovski, Prime Minister Hristijan Mickoski</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/no.png" alt="Norway Flag"></td><td>Norway</td><td class="leader">King Harald V, Prime Minister Jonas Gahr Støre</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/pl.png" alt="Poland Flag"></td><td>Poland</td><td class="leader">President Andrzej Duda, Prime Minister Donald Tusk</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/pt.png" alt="Portugal Flag"></td><td>Portugal</td><td class="leader">President Marcelo Rebelo de Sousa, Prime Minister Luís Montenegro</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ro.png" alt="Romania Flag"></td><td>Romania</td><td class="leader">President Klaus Iohannis, Prime Minister Nicușor Dan</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ru.png" alt="Russia Flag"></td><td>Russia</td><td class="leader">President Vladimir Putin, Prime Minister Mikhail Mishustin</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sm.png" alt="San Marino Flag"></td><td>San Marino</td><td class="leader">Captains Regent (Elected every six months)</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/rs.png" alt="Serbia Flag"></td><td>Serbia</td><td class="leader">President Aleksandar Vučić, Prime Minister Djuro Macut</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sk.png" alt="Slovakia Flag"></td><td>Slovakia</td><td class="leader">President Peter Pellegrini, Prime Minister Robert Fico</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/si.png" alt="Slovenia Flag"></td><td>Slovenia</td><td class="leader">President Nataša Pirc Musar, Prime Minister Robert Golob</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/es.png" alt="Spain Flag"></td><td>Spain</td><td class="leader">King Felipe VI, Prime Minister Pedro Sánchez</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/se.png" alt="Sweden Flag"></td><td>Sweden</td><td class="leader">King Carl XVI Gustaf, Prime Minister Ulf Kristersson</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ch.png" alt="Switzerland Flag"></td><td>Switzerland</td><td class="leader">President of the Confederation Karin Keller-Sutter</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ua.png" alt="Ukraine Flag"></td><td>Ukraine</td><td class="leader">President Volodymyr Zelenskyy, Prime Minister Denys Shmyhal</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/gb.png" alt="United Kingdom Flag"></td><td>United Kingdom</td><td class="leader">Monarch King Charles III, Prime Minister Keir Starmer</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<div class="continent" id="oceania">
-  <h2>Oceania / Australia <span class="toggle-icon">+</span></h2>
-  <div class="countries-list">
-    <table>
-      <thead><tr><th>Flag</th><th>Country</th><th>Leader</th></tr></thead>
-      <tbody>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/au.png" alt="Australia Flag"></td><td>Australia</td><td class="leader">Monarch King Charles III, Governor-General David Hurley, Prime Minister Anthony Albanese</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/fj.png" alt="Fiji Flag"></td><td>Fiji</td><td class="leader">President Naiqama Lalabalavu, Prime Minister Sitiveni Rabuka</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ki.png" alt="Kiribati Flag"></td><td>Kiribati</td><td class="leader">President Taneti Maamau</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/mh.png" alt="Marshall Islands Flag"></td><td>Marshall Islands</td><td class="leader">President Hilda Heine</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/fm.png" alt="Micronesia Flag"></td><td>Micronesia (Federated States of)</td><td class="leader">President Wesley Simina</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/nr.png" alt="Nauru Flag"></td><td>Nauru</td><td class="leader">President David Adeang</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/nz.png" alt="New Zealand Flag"></td><td>New Zealand</td><td class="leader">Monarch King Charles III, Governor-General Cindy Kiro, Prime Minister Christopher Luxon</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/pw.png" alt="Palau Flag"></td><td>Palau</td><td class="leader">President Surangel Whipps Jr.</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/pg.png" alt="Papua New Guinea Flag"></td><td>Papua New Guinea</td><td class="leader">Monarch King Charles III, Governor-General Bob Dadae, Prime Minister James Marape</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/ws.png" alt="Samoa Flag"></td><td>Samoa</td><td class="leader">Head of State Tuimalealiʻifano Vaʻaletoʻa Sualauvi II, Prime Minister Fiamē Naomi Mataʻafa</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/sb.png" alt="Solomon Islands Flag"></td><td>Solomon Islands</td><td class="leader">Monarch King Charles III, Governor-General David Vunagi, Prime Minister Jeremiah Manele</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/to.png" alt="Tonga Flag"></td><td>Tonga</td><td class="leader">Monarch King Tupou VI, Prime Minister ʻAisake Eke</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/tv.png" alt="Tuvalu Flag"></td><td>Tuvalu</td><td class="leader">Monarch King Charles III, Governor-General Tofiga Vaevalu Falani, Prime Minister Feleti Teo</td></tr>
-        <tr><td><img class="flag" src="https://flagcdn.com/w40/vu.png" alt="Vanuatu Flag"></td><td>Vanuatu</td><td class="leader">President Nikenike Vurobaravu, Prime Minister Jotham Napat</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+        <div class="continent" id="oceania">
+            <h2>Oceania / Australia <span class="toggle-icon">+</span></h2>
+            <div class="countries-list">
+                <table>
+                    <thead><tr><th>Flag</th><th>Country</th><th>Leaders</th></tr></thead>
+                    <tbody>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/au.png" alt="Australia Flag"></td><td>Australia</td><td class="leader">Monarch King Charles III, Governor-General David Hurley, Prime Minister Anthony Albanese</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/fj.png" alt="Fiji Flag"></td><td>Fiji</td><td class="leader">President Naiqama Lalabalavu, Prime Minister Sitiveni Rabuka</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ki.png" alt="Kiribati Flag"></td><td>Kiribati</td><td class="leader">President Taneti Maamau</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/mh.png" alt="Marshall Islands Flag"></td><td>Marshall Islands</td><td class="leader">President Hilda Heine</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/fm.png" alt="Micronesia Flag"></td><td>Micronesia (Federated States of)</td><td class="leader">President Wesley Simina</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/nr.png" alt="Nauru Flag"></td><td>Nauru</td><td class="leader">President David Adeang</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/nz.png" alt="New Zealand Flag"></td><td>New Zealand</td><td class="leader">Monarch King Charles III, Governor-General Cindy Kiro, Prime Minister Christopher Luxon</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/pw.png" alt="Palau Flag"></td><td>Palau</td><td class="leader">President Surangel Whipps Jr.</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/pg.png" alt="Papua New Guinea Flag"></td><td>Papua New Guinea</td><td class="leader">Monarch King Charles III, Governor-General Bob Dadae, Prime Minister James Marape</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/ws.png" alt="Samoa Flag"></td><td>Samoa</td><td class="leader">Head of State Tuimalealiʻifano Vaʻaletoʻa Sualauvi II, Prime Minister Fiamē Naomi Mataʻafa</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/sb.png" alt="Solomon Islands Flag"></td><td>Solomon Islands</td><td class="leader">Monarch King Charles III, Governor-General David Vunagi, Prime Minister Jeremiah Manele</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/to.png" alt="Tonga Flag"></td><td>Tonga</td><td class="leader">Monarch King Tupou VI, Prime Minister ʻAisake Eke</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/tv.png" alt="Tuvalu Flag"></td><td>Tuvalu</td><td class="leader">Monarch King Charles III, Governor-General Tofiga Vaevalu Falani, Prime Minister Feleti Teo</td></tr>
+                        <tr><td><img class="flag" src="https://flagcdn.com/w40/vu.png" alt="Vanuatu Flag"></td><td>Vanuatu</td><td class="leader">President Nikenike Vurobaravu, Prime Minister Jotham Napat</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<div class="continent" id="antarctica">
-  <h2>Antarctica <span class="toggle-icon">+</span></h2>
-  <div class="countries-list">
-    <p>Antarctica has no countries or leaders.</p>
-  </div>
-</div>
+        <div class="continent" id="antarctica">
+            <h2>Antarctica <span class="toggle-icon">+</span></h2>
+            <div class="countries-list">
+                <p>Antarctica has no countries or leaders.</p>
+            </div>
+        </div>
+    </div>
 
-<script>
-  // Toggle continent countries list
-  document.querySelectorAll('.continent > h2').forEach(header => {
-    header.addEventListener('click', () => {
-      const list = header.nextElementSibling;
-      const icon = header.querySelector('.toggle-icon');
-      if (list.style.display === 'block') {
-        list.style.display = 'none';
-        icon.textContent = '+';
-      } else {
-        list.style.display = 'block';
-        icon.textContent = '−';
-      }
-    });
-  });
-</script>
+    <footer>
+        <p>Made by <a href="https://linktr.ee/sanketdutta" target="_blank">Sanket</a></p>
+    </footer>
 
-<footer>
-    <p>Made by <a href="https://linktr.ee/sanketdutta" target="_blank">Sanket</a></p>
-</footer>
-
-<style>
-    footer {
-        text-align: center;
-        padding: 20px;
-        background-color: #000000;
-        border-top: 1px solid #333333;
-    }
-    footer p {
-        margin: 0;
-        font-size: 14px;
-        color: #ffffff;
-    }
-    footer a {
-        color: #1e90ff;
-        text-decoration: none;
-    }
-    footer a:hover {
-        text-decoration: underline;
-    }
-</style>
-
-
-
+    <script>
+        document.querySelectorAll('.continent > h2').forEach(header => {
+            header.addEventListener('click', () => {
+                const list = header.nextElementSibling;
+                const icon = header.querySelector('.toggle-icon');
+                if (list.style.display === 'block') {
+                    list.style.display = 'none';
+                    icon.textContent = '+';
+                } else {
+                    list.style.display = 'block';
+                    icon.textContent = '−';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
