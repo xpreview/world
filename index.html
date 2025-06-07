@@ -381,76 +381,32 @@
   });
 </script>
 
-</body>
-
-<footer style="text-align: center; padding: 10px; background-color: #f2f2f2; font-family: Arial, sans-serif;">
-  Made by 
-  <a href="https://linktr.ee/sanketdutta" target="_blank" rel="noopener noreferrer" class="color-change">
-    Sanket
-  </a>
+<footer>
+    <p>Made by <a href="https://linktr.ee/sanketdutta" target="_blank">Sanket</a></p>
 </footer>
 
 <style>
-  @keyframes colorCycle {
-    0% { color: #ff0000; }
-    25% { color: #00ff00; }
-    50% { color: #0000ff; }
-    75% { color: #ffa500; }
-    100% { color: #ff0000; }
-  }
-
-  .color-change {
-    animation: colorCycle 5s linear infinite;
-    text-decoration: none;
-  }
+    footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #000000;
+        border-top: 1px solid #333333;
+    }
+    footer p {
+        margin: 0;
+        font-size: 14px;
+        color: #ffffff;
+    }
+    footer a {
+        color: #1e90ff;
+        text-decoration: none;
+    }
+    footer a:hover {
+        text-decoration: underline;
+    }
 </style>
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Animated Background with Footer</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      animation: bgColorCycle 10s linear infinite;
-    }
 
-    @keyframes bgColorCycle {
-      0% { background-color: #ff9a9e; }
-      25% { background-color: #fad0c4; }
-      50% { background-color: #fbc2eb; }
-      75% { background-color: #a1c4fd; }
-      100% { background-color: #ff9a9e; }
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      font-weight: bold;
-    }
-
-    footer a {
-      color: #000;
-      text-decoration: none;
-      animation: linkColorCycle 5s linear infinite;
-    }
-
-    @keyframes linkColorCycle {
-      0% { color: #ff0000; }
-      25% { color: #00ff00; }
-      50% { color: #0000ff; }
-      75% { color: #ffa500; }
-      100% { color: #ff0000; }
-    }
-  </style>
-
-</html>
 </body>
 </html>
